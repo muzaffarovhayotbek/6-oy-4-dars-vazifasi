@@ -7,13 +7,12 @@ import { useState, useRef } from 'react';
 function App() {
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('998');
+  const [phone, setPhone] = useState('+998');
   const [residence, setResidence] = useState('');
   const [employees, setEmployees] = useState(0);
   const [description, setDescription] = useState('');
   const [data, setData] = useState([]);
 
-  // Inputlarga murojaat qilish uchun useRef
   const companyNameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneRef = useRef(null);
@@ -22,44 +21,42 @@ function App() {
   const descriptionRef = useRef(null);
 
   function validate() {
-    if (companyName.length < 3 || companyName.length > 50) {
+    if (companyName.length < 3 || companyName.length > 20) {
       alert(
-        "Kompaniya nomi kamida 3 ta va eng ko'pi bilan 50 ta belgidan iborat bo'lishi kerak"
+        "Kompaniya nomi kamida 3 ta va eng ko'pi bilan 20 ta belgidan iborat bo'lishi kerak"
       );
-      companyNameRef.current.focus(); // Fokusni kompaniya nomi inputiga qo'yish
+      companyNameRef.current.focus();
       return false;
     }
 
     if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
       alert("Email noto'g'ri! Faqat @gmail.com bilan tugashi kerak.");
-      emailRef.current.focus(); // Fokusni email inputiga qo'yish
+      emailRef.current.focus();
       return false;
     }
 
     const phonePattern = /^998\d{9}$/;
     if (!phonePattern.test(phone)) {
-      alert(
-        "Telefon raqam 998 dan boshlanib, 9 ta raqamdan iborat bo'lishi kerak!"
-      );
-      phoneRef.current.focus(); // Fokusni telefon inputiga qo'yish
+      alert("Telefon raqam hato, 9 ta raqamdan iborat bo'lishi kerak!");
+      phoneRef.current.focus();
       return false;
     }
 
-    if (residence.length < 12) {
-      alert('Yashash joy nomi kamida 12 ta belgi');
-      residenceRef.current.focus(); // Fokusni yashash joyi inputiga qo'yish
+    if (residence.length < 8) {
+      alert('Yashash joy nomi kamida 8 ta belgi');
+      residenceRef.current.focus();
       return false;
     }
 
     if (employees < 1000) {
       alert('Hodimlar soni hato');
-      employeesRef.current.focus(); // Fokusni hodimlar soni inputiga qo'yish
+      employeesRef.current.focus();
       return false;
     }
 
     if (description.length < 10) {
       alert("Izoh kamida 10 ta harf bo'lishi kerak");
-      descriptionRef.current.focus(); // Fokusni izoh inputiga qo'yish
+      descriptionRef.current.focus();
       return false;
     }
 
