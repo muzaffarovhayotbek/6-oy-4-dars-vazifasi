@@ -9,7 +9,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('+998');
   const [residence, setResidence] = useState('');
-  const [employees, setEmployees] = useState(0);
+  const [employees, setEmployees] = useState('');
   const [description, setDescription] = useState('');
   const [data, setData] = useState([]);
 
@@ -22,40 +22,39 @@ function App() {
 
   function validate() {
     if (companyName.length < 3 || companyName.length > 20) {
-      alert(
-        "Kompaniya nomi kamida 3 ta va eng ko'pi bilan 20 ta belgidan iborat bo'lishi kerak"
-      );
+      alert("Kompaniya nomi 3-20 belgi oralig'ida bo'lishi kerak");
       companyNameRef.current.focus();
       return false;
     }
 
-    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
-      alert("Email noto'g'ri! Faqat @gmail.com bilan tugashi kerak.");
+    const gmailPattern = /^[a-zA-Z0-9._%+-]{6,}@gmail\.com$/;
+    if (!gmailPattern.test(email)) {
+      alert("Email noto'g'ri. '@gmail.com' bilan tugashi kerak!");
       emailRef.current.focus();
       return false;
     }
 
-    const phonePattern = /^998\d{9}$/;
+    const phonePattern = /^\+998\d{9}$/;
     if (!phonePattern.test(phone)) {
-      alert("Telefon raqam hato, 9 ta raqamdan iborat bo'lishi kerak!");
+      alert("Telefon raqam noto'g'ri. '+998' bilan boshlanib, 9 ta raqam kiritilishi kerak!");
       phoneRef.current.focus();
       return false;
     }
 
     if (residence.length < 8) {
-      alert('Yashash joy nomi kamida 8 ta belgi');
+      alert('Yashash joy nomi kamida 8 ta belgi bo‘lishi kerak');
       residenceRef.current.focus();
       return false;
     }
 
-    if (employees < 1000) {
-      alert('Hodimlar soni hato');
+    if (isNaN(employees) || employees < 1 || employees > 1000) {
+      alert("Hodimlar soni 1 dan 1000 gacha bo‘lishi kerak");
       employeesRef.current.focus();
       return false;
     }
 
     if (description.length < 10) {
-      alert("Izoh kamida 10 ta harf bo'lishi kerak");
+      alert("Izoh kamida 10 ta belgi bo‘lishi kerak");
       descriptionRef.current.focus();
       return false;
     }
@@ -66,61 +65,59 @@ function App() {
   function handleSave(event) {
     event.preventDefault();
 
-    const isValid = validate();
-    if (!isValid) {
-      return;
-    }
+    if (!validate()) return;
+
     const user = {
       name: companyName,
-      email: email,
-      phone: phone,
-      residence: residence,
-      employees: employees,
-      description: description,
+      email,
+      phone,
+      residence,
+      employees: parseInt(employees),
+      description,
       id: Date.now(),
     };
-    const copiedData = [...data];
-    copiedData.push(user);
-    setData(copiedData);
+
+    setData((prevData) => [...prevData, user]);
+
+    // Formni tozalash
+    setCompanyName('');
+    setEmail('');
+    setPhone('+998');
+    setResidence('');
+    setEmployees('');
+    setDescription('');
   }
 
   return (
     <div>
       <Header />
       <div className="form container">
-        <img src={icon1} alt="" />
+        <img src={icon1} alt="Header Icon" />
         <h1>Kompaniya ma’lumotlari</h1>
         <h3>Kompaniya haqidagi ma’lumotlarni kiriting</h3>
         <div className="form-images">
-          <img width={84} height={84} src={icon} alt="" />
+          <img width={84} height={84} src={icon} alt="Form Icon" />
           <label>
             Yuklash
             <input className="file" type="file" />
           </label>
         </div>
 
-        <form className="form-two">
+        <form onSubmit={handleSave} className="form-content">
           <label>
-            <div className="form-two-div">
-              <span className="form-two-div-title">Kompaniya nomi *</span>
-            </div>
+            Kompaniya nomi *
             <input
               ref={companyNameRef}
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              required
               className="form-input"
               type="text"
               placeholder="Kompaniya nomi"
             />
           </label>
-        </form>
 
-        <form className="form-three">
           <label>
-            <div className="form-email">
-              <span className="form-two-email-title">Email *</span>
-            </div>
+            Email *
             <input
               ref={emailRef}
               value={email}
@@ -132,46 +129,34 @@ function App() {
           </label>
 
           <label>
-            <div className="form-phone-div">
-              <span className="phone-div-title">Telefon raqami *</span>
-            </div>
+            Telefon raqami *
             <input
               ref={phoneRef}
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="phone-input"
-              required
+              onChange={(e) => {
+                const input = e.target.value.replace(/[^\d+]/g, '');
+                if (input.startsWith('+998') && input.length <= 13) setPhone(input);
+              }}
+              className="form-input"
               type="tel"
               placeholder="UZ +998"
             />
           </label>
 
-          <label>Davlat *</label>
-          <div className="select">
-            <select className="dav">
-              <option>Davlat</option>
-              <option>Shahar</option>
-            </select>
-          </div>
-
           <label>
-            <div className="form-residence">
-              <span className="form-two-residence-title">Yashash joyi *</span>
-            </div>
+            Yashash joyi *
             <input
               ref={residenceRef}
               value={residence}
               onChange={(e) => setResidence(e.target.value)}
               className="form-input"
               type="text"
-              placeholder="Joy"
+              placeholder="Yashash joyi"
             />
           </label>
 
           <label>
-            <div className="form-employees">
-              <span className="form-two-employees-title">Hodimlar soni *</span>
-            </div>
+            Hodimlar soni *
             <input
               ref={employeesRef}
               value={employees}
@@ -182,37 +167,39 @@ function App() {
             />
           </label>
 
-          <div className="footer">
-            <label>Izoh</label>
+          <label>
+            Izoh
             <input
               ref={descriptionRef}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="desc"
+              className="form-input"
               type="text"
-              placeholder="Kompaniya haqida izoh qoldiring"
+              placeholder="Kompaniya haqida izoh"
             />
+          </label>
+
+          <div className="buttons">
+            <button type="reset" className="first-btn">
+              Ortga
+            </button>
+            <button type="submit" className="two-bnt">
+              Keyingisi
+            </button>
           </div>
         </form>
-
-        <div className="buttons">
-          <button className="first-btn">Ortga</button>
-          <button onClick={handleSave} type="submit" className="two-bnt">
-            Keyingisi
-          </button>
-        </div>
       </div>
 
-      <div>
+      <div className="data-display">
         {data.length > 0 &&
           data.map((user) => (
-            <div className="container card" key={user.id}>
-              <h3 className="company">{user.name}</h3>
-              <h3 className="email">{user.email}</h3>
-              <h3>{user.phone}</h3>
-              <h3>{user.residence}</h3>
-              <h3>{user.employees}</h3>
-              <h3>{user.description}</h3>
+            <div className="card" key={user.id}>
+              <h3>{user.name}</h3>
+              <p>Email: {user.email}</p>
+              <p>Telefon: {user.phone}</p>
+              <p>Joylashuv: {user.residence}</p>
+              <p>Hodimlar soni: {user.employees}</p>
+              <p>Izoh: {user.description}</p>
             </div>
           ))}
       </div>

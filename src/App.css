@@ -173,6 +173,7 @@
   padding: 18px;
   gap: 10px;
   border-radius: 16px;
+  border: none;
 }
 
 .card {
@@ -183,4 +184,9 @@
 
 .email {
   padding-bottom: 8px;
+}
+
+.card {
+  padding: 20px;
+  background-color: red;
 }
