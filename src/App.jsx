@@ -50,9 +50,7 @@ function App() {
 
     const phonePattern = /^\+998\d{9}$/;
     if (!phonePattern.test(phone)) {
-      alert(
-        "Telefon raqam noto'g'ri. '+998' bilan boshlanib, 9 ta raqam kiritilishi kerak!"
-      );
+      alert("Telefon raqam noto'g'ri 9 ta raqam kiritilishi kerak!");
       phoneRef.current.focus();
       return false;
     }
