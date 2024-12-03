@@ -22,8 +22,11 @@
   font-weight: 500;
   line-height: 22.77px;
   color: #ffffff;
+  transition: all 0.5s;
 }
-
+.header-list a:hover {
+  color: darkblue;
+}
 .header-end {
   display: flex;
   align-items: center;
