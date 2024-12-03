@@ -30,7 +30,7 @@ function App() {
       };
       reader.readAsDataURL(file);
     } else {
-      alert("Iltimos, rasm faylini tanlang.");
+      alert('Iltimos, rasm faylini tanlang.');
     }
   }
 
@@ -50,7 +50,9 @@ function App() {
 
     const phonePattern = /^\+998\d{9}$/;
     if (!phonePattern.test(phone)) {
-      alert("Telefon raqam noto'g'ri. '+998' bilan boshlanib, 9 ta raqam kiritilishi kerak!");
+      alert(
+        "Telefon raqam noto'g'ri. '+998' bilan boshlanib, 9 ta raqam kiritilishi kerak!"
+      );
       phoneRef.current.focus();
       return false;
     }
@@ -62,13 +64,13 @@ function App() {
     }
 
     if (isNaN(employees) || employees < 1 || employees > 1000) {
-      alert("Hodimlar soni 1 dan 1000 gacha bo‘lishi kerak");
+      alert('Hodimlar soni 1 dan 1000 gacha bo‘lishi kerak');
       employeesRef.current.focus();
       return false;
     }
 
     if (description.length < 10) {
-      alert("Izoh kamida 10 ta belgi bo‘lishi kerak");
+      alert('Izoh kamida 10 ta belgi bo‘lishi kerak');
       descriptionRef.current.focus();
       return false;
     }
@@ -93,7 +95,6 @@ function App() {
 
     setData((prevData) => [...prevData, user]);
 
-    // Formni tozalash
     setCompanyName('');
     setEmail('');
     setPhone('+998');
@@ -114,13 +115,16 @@ function App() {
           <img width={84} height={84} src={icon} alt="Form Icon" />
           <label>
             Yuklash
-            <input
-              className="file"
-              type="file"
-              onChange={handleFileChange}
-            />
+            <input className="file" type="file" onChange={handleFileChange} />
           </label>
-          {uploadedImage && <img src={uploadedImage} alt="Uploaded preview" width={100} height={100} />}
+          {uploadedImage && (
+            <img
+              src={uploadedImage}
+              alt="Uploaded preview"
+              width={100}
+              height={100}
+            />
+          )}
         </div>
 
         <form onSubmit={handleSave} className="form-content">
@@ -155,7 +159,8 @@ function App() {
               value={phone}
               onChange={(e) => {
                 const input = e.target.value.replace(/[^\d+]/g, '');
-                if (input.startsWith('+998') && input.length <= 13) setPhone(input);
+                if (input.startsWith('+998') && input.length <= 13)
+                  setPhone(input);
               }}
               className="form-input"
               type="tel"
