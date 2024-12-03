@@ -12,6 +12,7 @@ function App() {
   const [employees, setEmployees] = useState('');
   const [description, setDescription] = useState('');
   const [data, setData] = useState([]);
+  const [uploadedImage, setUploadedImage] = useState(null);
 
   const companyNameRef = useRef(null);
   const emailRef = useRef(null);
@@ -19,6 +20,19 @@ function App() {
   const residenceRef = useRef(null);
   const employeesRef = useRef(null);
   const descriptionRef = useRef(null);
+
+  function handleFileChange(event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setUploadedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert("Iltimos, rasm faylini tanlang.");
+    }
+  }
 
   function validate() {
     if (companyName.length < 3 || companyName.length > 20) {
@@ -86,6 +100,7 @@ function App() {
     setResidence('');
     setEmployees('');
     setDescription('');
+    setUploadedImage(null);
   }
 
   return (
@@ -99,8 +114,13 @@ function App() {
           <img width={84} height={84} src={icon} alt="Form Icon" />
           <label>
             Yuklash
-            <input className="file" type="file" />
+            <input
+              className="file"
+              type="file"
+              onChange={handleFileChange}
+            />
           </label>
+          {uploadedImage && <img src={uploadedImage} alt="Uploaded preview" width={100} height={100} />}
         </div>
 
         <form onSubmit={handleSave} className="form-content">
